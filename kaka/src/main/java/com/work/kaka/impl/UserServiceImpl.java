@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public abstract class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -45,8 +45,6 @@ public abstract class UserServiceImpl implements UserService {
         }
 
         // Update fields (Consider which fields are updatable)
-        existingUser.setName(updatedUser.getName());
-        existingUser.setEmail(updatedUser.getEmail());
         // ... more fields if applicable ...
 
         return userRepository.save(existingUser);

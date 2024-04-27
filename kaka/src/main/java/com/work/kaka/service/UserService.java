@@ -2,7 +2,10 @@ package com.work.kaka.service;
 
 import com.work.kaka.dto.UserDTO;
 import com.work.kaka.model.User;
+import org.springframework.stereotype.Service;
+
 import java.util.List; // Add if necessary
+
 
 public interface UserService {
 
