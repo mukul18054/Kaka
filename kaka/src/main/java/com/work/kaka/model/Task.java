@@ -1,19 +1,25 @@
-package com.work.kaka.model; // Assuming your model classes are within this package
+package com.work.kaka.model;
 
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity // Signifies this class represents a database table
-@Getter // Lombok: Generate getters for all fields
-@Setter // Lombok: Generate setters for all fields
+@Entity
+@Getter
+@Setter
 public class Task {
 
-    @Id // Marks the primary key
-    @GeneratedValue(strategy = GenerationType.AUTO) // Optional, for auto-incrementing IDs
+
+    // Consider using an Enum for status
+    public enum TaskStatus {
+        ACTIVE, IN_PROGRESS, COMPLETED, CANCELLED
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long taskId;
 
-    @Column(nullable = false) // Ensures these fields cannot be null
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -23,21 +29,35 @@ public class Task {
     private double offeredPrice;
 
     @Column(nullable = false)
-    private String status;
+    private TaskStatus status;  //  Consider using an Enum here (see below)
 
-    @OneToOne // One-to-one mapping with a User
-    @JoinColumn(name = "creator_id", referencedColumnName = "userId") // Customize join details if needed
+    @OneToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "userId")
     private User creator;
 
-    @OneToOne(optional = true) // One-to-one optional mapping for an assignee
+    @OneToOne(optional = true)
     @JoinColumn(name = "assignee_id", referencedColumnName = "userId")
     private User assignee;
 
     private String location;
 
-    // Constructors (No-args and All-args)
-    // ...
+    @OneToOne
+    private Requirement requirement; // Reference to the originating Requirement
 
-    // Getters and Setters
-    // ...
+
+    public Task() {
+    }
+
+    public Task(String title, String description, double offeredPrice, String status, User creator, User assignee, String location, Requirement requirement) {
+        this.title = title;
+        this.description = description;
+        this.offeredPrice = offeredPrice;
+        this.status = TaskStatus.ACTIVE;
+        this.creator = creator;
+        this.assignee = assignee;
+        this.location = location;
+        this.requirement = requirement;
+    }
+
+
 }

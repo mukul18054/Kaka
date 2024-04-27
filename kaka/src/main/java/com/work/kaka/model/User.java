@@ -12,6 +12,7 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long userId;
 
     @Column(nullable = false)
@@ -37,7 +38,7 @@ public class User {
 
     // Assuming 'Post' is another entity in your system
     @OneToMany(mappedBy = "author") // Specifies the reverse side of the relation
-    private List<Post> posts;
+    private List<Requirement> posts;
 
     @Column(nullable = false)
     private String password; // Sensitive data, should always be stored securely
@@ -62,4 +63,37 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "community_id")
     )
     private List<Community> communities;
+
+    // 1. No-Argument Constructor (Often required by frameworks)
+    public User() {
+    }
+
+    // 2. Constructor for Essential Details
+    public User(String name, String address, String contactNumber, String email, String password) {
+        this.name = name;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.password = password;
+        this.backgroundVerificationStatus = "unverified"; // Default status
+        this.rating = 0.0; // Default rating
+    }
+
+    // 3. Additional Constructor for Full Details
+    public User(long userId, String name, String address, String contactNumber, String email, String idType,
+                String idNumber, String backgroundVerificationStatus, List<Requirement> posts, String password,
+                byte[] profileImage , int age) {
+        this.userId = userId;
+        this.name = name;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.idType = idType;
+        this.idNumber = idNumber;
+        this.backgroundVerificationStatus = backgroundVerificationStatus;
+        this.posts = posts;
+        this.password = password;
+        this.profileImage = profileImage;
+        this.age = age;
+    }
 }

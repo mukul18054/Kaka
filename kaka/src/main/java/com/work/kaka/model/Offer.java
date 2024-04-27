@@ -1,0 +1,52 @@
+package com.work.kaka.model;
+
+import com.work.kaka.model.Requirement;
+import com.work.kaka.model.User;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime; // For offer timestamp
+
+@Entity
+@Getter
+@Setter
+public class Offer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long offerId;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private double offeredPrice;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
+    @OneToOne
+    private User offeredBy;
+
+    @OneToOne
+    private Requirement offeredFor;
+
+    // 1. No-Argument Constructor (Often required by frameworks)
+    public Offer() {
+    }
+
+    // 2. Constructor for Essential Details
+    public Offer(String description, double offeredPrice, LocalDateTime timestamp, User offeredBy, Requirement offeredFor) {
+        this.description = description;
+        this.offeredPrice = offeredPrice;
+        this.timestamp = timestamp;
+        this.offeredBy = offeredBy;
+        this.offeredFor = offeredFor;
+    }
+
+    // 3. Additional Constructors as needed
+    public Offer(String description, double offeredPrice, User offeredBy, Requirement offeredFor) {
+        this.description = description;
+    }
+}
