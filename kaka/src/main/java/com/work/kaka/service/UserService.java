@@ -6,7 +6,7 @@ import java.util.List; // Add if necessary
 
 public interface UserService {
 
-    User createUser(UserDTO user);
+    User createUser(UserDTO userDTO, String password);
 
     User findById(long userId);
 

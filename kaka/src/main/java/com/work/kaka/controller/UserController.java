@@ -14,10 +14,13 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping("/users")
-    public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO) {
-        User newUser = userService.createUser(userDTO);
+    public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO,
+                                             @RequestParam("password") String password) {
+
+        User newUser = userService.createUser(userDTO, password);
         return ResponseEntity.created(URI.create("/users/" + newUser.getUserId())).body(newUser);
     }
+
 
 
     @GetMapping("/users/{userId}")

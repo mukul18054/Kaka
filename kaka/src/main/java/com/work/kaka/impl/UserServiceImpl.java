@@ -22,12 +22,12 @@ public abstract class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO, String password) {
         // Thorough input validation ...
         User user = new User();
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(userDTO, user); // Using ModelMapper for mapping
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setPassword(passwordEncoder.encode(password)); // Encode and save
         return userRepository.save(user);
     }
 
