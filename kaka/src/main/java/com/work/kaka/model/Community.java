@@ -1,11 +1,12 @@
 package com.work.kaka.model;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
+
+//import javax.persistence.*;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
-import java.time.LocalDate;  // For communityDateOfCreation
 
 @Entity
 @Getter

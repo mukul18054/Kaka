@@ -1,11 +1,10 @@
 package com.work.kaka.model;
 
-import com.work.kaka.model.Requirement;
-import com.work.kaka.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+//import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime; // For offer timestamp
 
 @Entity
