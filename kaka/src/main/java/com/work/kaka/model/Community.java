@@ -46,7 +46,8 @@ public class Community {
     @Column(nullable = false)
     private LocalDate communityDateOfCreation;
 
-    @OneToOne(mappedBy = "communityAdministered") // Defines inverse side of the relationship
+    @OneToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "userId")
     private User admin;
 
     @ManyToMany
@@ -55,19 +56,18 @@ public class Community {
             joinColumns = @JoinColumn(name = "community_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<Community> members;
 
-    @OneToMany(mappedBy = "community")
-    private List<Requirement> communityPosts;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "community", cascade = CascadeType.ALL)
+//    private List<Requirement> communityPosts;
 
     @ElementCollection
-    private List<String> communityOwners; // User IDs
+    private List<User> communityOwners; // User IDs
 
     @Column
     private String communityManager;
 
-    @ElementCollection
-    private List<String> communityMembers; // User IDs (Potentially redundant with ManyToMany?)
+    @ManyToMany(mappedBy = "communities") // Inverse side
+    private List<User> communitymembers;
 
     @Column
     private double communityRating; // Use 'double' for more detailed ratings

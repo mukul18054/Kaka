@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(UserDTO userDTO, String password) {
@@ -27,7 +27,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(userDTO, user); // Using ModelMapper for mapping
-        user.setPassword(passwordEncoder.encode(password)); // Encode and save
+//        user.setPassword(passwordEncoder.encode(password)); // Encode and save
+        user.setPassword(password); // Encode and save
         return userRepository.save(user);
     }
 

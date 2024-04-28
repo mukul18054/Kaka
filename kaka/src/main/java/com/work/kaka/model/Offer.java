@@ -26,9 +26,11 @@ public class Offer {
     private LocalDateTime timestamp;
 
     @OneToOne
+    @JoinColumn(name = "offered_by", referencedColumnName = "userId")
     private User offeredBy;
 
     @OneToOne
+    @JoinColumn(name = "offered_for", referencedColumnName = "requirementId")
     private Requirement offeredFor;
 
     // 1. No-Argument Constructor (Often required by frameworks)

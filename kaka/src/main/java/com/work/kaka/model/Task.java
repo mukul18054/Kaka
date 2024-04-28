@@ -9,8 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Task {
-
-
     // Consider using an Enum for status
     public enum TaskStatus {
         ACTIVE, IN_PROGRESS, COMPLETED, CANCELLED

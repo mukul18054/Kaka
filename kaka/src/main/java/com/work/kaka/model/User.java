@@ -38,8 +38,11 @@ public class User {
     private String backgroundVerificationStatus; // verified, inProcess, rejected, unverified
 
     // Assuming 'Post' is another entity in your system
-    @OneToMany(mappedBy = "author") // Specifies the reverse side of the relation
-    private List<Requirement> posts;
+    @OneToMany(mappedBy = "postedBy") // Specifies the reverse side of the relation
+    private List<Requirement> requirement;
+
+    @OneToMany(mappedBy = "assignee")
+    private List<Task> assignedTasks;
 
     @Column(nullable = false)
     private String password; // Sensitive data, should always be stored securely
@@ -82,7 +85,7 @@ public class User {
 
     // 3. Additional Constructor for Full Details
     public User(long userId, String name, String address, String contactNumber, String email, String idType,
-                String idNumber, String backgroundVerificationStatus, List<Requirement> posts, String password,
+                String idNumber, String backgroundVerificationStatus, List<Requirement> requirement, String password,
                 byte[] profileImage , int age) {
         this.userId = userId;
         this.name = name;
@@ -92,7 +95,7 @@ public class User {
         this.idType = idType;
         this.idNumber = idNumber;
         this.backgroundVerificationStatus = backgroundVerificationStatus;
-        this.posts = posts;
+        this.requirement = requirement;
         this.password = password;
         this.profileImage = profileImage;
         this.age = age;

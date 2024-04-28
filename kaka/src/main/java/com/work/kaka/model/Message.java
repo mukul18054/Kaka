@@ -23,10 +23,12 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @OneToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false) // Sender of the message
     private User sender;
 
-    @OneToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "recipient_id", nullable = false) // Recipient of the message
     private User recipient;
 
     @ManyToOne

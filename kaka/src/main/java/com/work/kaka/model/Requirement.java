@@ -51,8 +51,13 @@ public class Requirement {
     @OneToOne(mappedBy = "requirement") // Inverse side if Task-Requirement is bi-directional
     private Task task;
 
-    @OneToOne(mappedBy = "requirement")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "chat_id")
     private Chat chat;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "community_id")
+    private Community community;
 
 
     // 1. No-Argument Constructor (Often required by frameworks)
