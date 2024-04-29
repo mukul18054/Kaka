@@ -28,6 +28,8 @@ public class UserServiceImpl implements UserService {
         modelMapper.map(userDTO, user); // Using ModelMapper for mapping
 //        user.setPassword(passwordEncoder.encode(password)); // Encode and save
         user.setPassword(password); // Encode and save
+        user.setBackgroundVerificationStatus("PENDING");
+        user.setContactNumber("9876543210");
         return userRepository.save(user);
     }
 
