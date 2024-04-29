@@ -35,7 +35,7 @@ public class User {
     private String idNumber; // mobile number by default
 
     @Column(nullable = false)
-    private String backgroundVerificationStatus; // verified, inProcess, rejected, unverified
+    private String backgroundVerificationStatus = "PENDING"; // verified, inProcess, rejected, unverified
 
     // Assuming 'Post' is another entity in your system
     @OneToMany(mappedBy = "postedBy") // Specifies the reverse side of the relation
