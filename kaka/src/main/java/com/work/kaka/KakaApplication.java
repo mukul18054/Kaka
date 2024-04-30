@@ -9,6 +9,4 @@ public class KakaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(KakaApplication.class, args);
 	}
-
-
 }

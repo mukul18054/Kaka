@@ -1,18 +1,13 @@
 package com.work.kaka.controller;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.work.kaka.dto.UserDTO;
 import com.work.kaka.model.*;
 import com.work.kaka.service.UserService;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,7 +21,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO
                                              ) {
-        System.out.println("userDTO: " + userDTO);
+
         User newUser = userService.createUser(userDTO, "password");
         return ResponseEntity.created(URI.create("/users/" + newUser.getUserId())).body(newUser);
     }
