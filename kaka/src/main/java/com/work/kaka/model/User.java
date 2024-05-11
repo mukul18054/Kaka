@@ -1,16 +1,24 @@
 package com.work.kaka.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //import javax.persistence.*;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,10 +36,10 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = true)
+    @Column()
     private String idType; // mobile by default
 
-    @Column(nullable = true)
+    @Column()
     private String idNumber; // mobile number by default
 
     @Column(nullable = false)
@@ -69,8 +77,6 @@ public class User {
     private List<Community> communities;
 
     // 1. No-Argument Constructor (Often required by frameworks)
-    public User() {
-    }
 
     // 2. Constructor for Essential Details
     public User(String name, String address, String contactNumber, String email, String password) {
@@ -99,5 +105,35 @@ public class User {
         this.password = password;
         this.profileImage = profileImage;
         this.age = age;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
