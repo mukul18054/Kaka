@@ -17,6 +17,9 @@ public interface UserService {
 
     void deleteUser(long userId);
 
+    List<User> getUserList(String name, String role);
+
+
     // Additional methods if needed:
 
     // List<User> findAll(); // If you want a method to get all users

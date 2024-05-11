@@ -7,8 +7,10 @@ import com.work.kaka.service.UserService;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +19,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(UserDTO userDTO, String password) {
@@ -26,8 +28,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(userDTO, user); // Using ModelMapper for mapping
-//        user.setPassword(passwordEncoder.encode(password)); // Encode and save
-        user.setPassword(password); // Encode and save
+        user.setPassword(passwordEncoder.encode(password)); // Encode and save
         user.setBackgroundVerificationStatus("PENDING");
         user.setContactNumber("9876543210");
         return userRepository.save(user);
@@ -59,4 +60,12 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(existingUser);
         } // Or handle cases where the user was not found
     }
+
+    @Override
+    public List<User> getUserList(String name, String role) {
+        // Implement filtering based on name and role
+        return userRepository.findAll(); // Example: Return all users
+    }
+
+
 }
