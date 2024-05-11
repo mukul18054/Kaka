@@ -1,5 +1,6 @@
 package com.work.kaka.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -34,10 +36,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = true)
+    @Column()
     private String idType; // mobile by default
 
-    @Column(nullable = true)
+    @Column()
     private String idNumber; // mobile number by default
 
     @Column(nullable = false)
