@@ -1,26 +1,26 @@
 package com.work.kaka.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-//import javax.persistence.*;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder // Use Builder to help create instances of Community
 public class Community {
 
-    // Consider using an Enum for status
     public enum CommunityStatus {
         ACTIVE, INACTIVE
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long communityId;
+    private Long communityId;
 
     @Column(nullable = false)
     private String communityName;
@@ -37,8 +37,9 @@ public class Community {
     @Column
     private String communitySize;
 
+    @Enumerated(EnumType.STRING) // Use EnumType.STRING for storing enums as strings
     @Column(nullable = false)
-    private CommunityStatus communityStatus;  // Consider an Enum for values like 'Active', 'Pending', etc.
+    private CommunityStatus communityStatus;
 
     @Column
     private String communityJoiningFees;
@@ -46,55 +47,39 @@ public class Community {
     @Column(nullable = false)
     private LocalDate communityDateOfCreation;
 
-    @OneToOne
+    @ManyToOne // A Community has one Admin (User)
     @JoinColumn(name = "admin_id", referencedColumnName = "userId")
     private User admin;
 
-    @ManyToMany
-    @JoinTable( // Customize join table if needed
-            name = "user_community",
-            joinColumns = @JoinColumn(name = "community_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @ManyToMany(mappedBy = "communities") // Bidirectional relationship
+    private List<User> communityMembers;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "community", cascade = CascadeType.ALL)
-//    private List<Requirement> communityPosts;
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL) // Each community has many posts
+    private List<Requirement> communityPosts;
 
-    @ElementCollection
-    private List<User> communityOwners; // User IDs
 
     @Column
-    private String communityManager;
-
-    @ManyToMany(mappedBy = "communities") // Inverse side
-    private List<User> communitymembers;
-
-    @Column
-    private double communityRating; // Use 'double' for more detailed ratings
+    private double communityRating;
 
     @ElementCollection
-    private List<String> communitySuggestion;
+    private List<String> communitySuggestions; // Using plural for clarity
 
     @ElementCollection
-    private List<String> communityComplaint;
+    private List<String> communityComplaints; // Using plural for clarity
 
-    // 1. No-Argument Constructor (Often required by JPA)
-    public Community() {
-    }
-
-    // 2. Constructor for Essential Details
+    // Constructor with essential fields
     public Community(String communityName, String communityDescription, String communityLocation, User admin) {
         this.communityName = communityName;
         this.communityDescription = communityDescription;
         this.communityLocation = communityLocation;
+        this.communityStatus = CommunityStatus.ACTIVE;
+        this.communityDateOfCreation = LocalDate.now();
         this.admin = admin;
-        this.communityDateOfCreation = LocalDate.now(); // Auto-set creation date
-        this.communityStatus = CommunityStatus.ACTIVE; // Set a default active status
     }
 
-    // 3. (Optional) Constructor for All Fields (Less Common)
-    public Community(long communityId, String communityName, String communityDescription) {
-        this.communityId = communityId;
-        // ... set other fields similarly
+    // Builder for easier object creation
+    public static class CommunityBuilder {
+        // ... builder methods for each field ...
     }
+
 }
