@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .authorizeRequests().
                 requestMatchers("/users/**").authenticated().
                 requestMatchers("/auth/login").permitAll()
+                .requestMatchers("requirements/**").permitAll()
                 .requestMatchers("/api/communities").authenticated() // Allow listing all communities
                 .requestMatchers("/api/communities/{communityId}").authenticated() // Allow getting a community by ID
                 .anyRequest()

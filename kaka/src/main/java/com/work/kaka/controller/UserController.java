@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/listUsers") // Example: "/users/listUsers?name=John&role=ADMIN
-    @PreAuthorize("hasRole('ADMIN')") // Assuming Spring Security for role-based authorization
+//    @PreAuthorize("hasRole('ROLE_ADMIN')") // Assuming Spring Security for role-based authorization
     public ResponseEntity<List<User>> listUsers(@RequestParam(required = false) String name,
                                                 @RequestParam(required = false) String role) {
         List<User> users = userService.getUserList(name, role); // Implement filtering in your service

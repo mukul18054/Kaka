@@ -3,8 +3,8 @@ package com.work.kaka.model;
 //import javax.persistence.*;
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDate;  // For dates
 import java.time.LocalDateTime; // For timestamps
 import java.util.List;
@@ -12,6 +12,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Requirement {
 
     // Consider using an Enum for status
@@ -33,7 +36,7 @@ public class Requirement {
     @Column(nullable = false)
     private LocalDate serviceNeededDate;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime postedTimestamp;
 
     @Column(nullable = false)
@@ -60,10 +63,6 @@ public class Requirement {
     private Community community;
 
 
-    // 1. No-Argument Constructor (Often required by frameworks)
-    public Requirement() {
-    }
-
     // 2. Constructor for Essential Details
     public Requirement(String description, double budget, LocalDate serviceNeededDate, String location, User postedBy) {
         this.description = description;
@@ -73,11 +72,5 @@ public class Requirement {
         this.postedBy = postedBy;
         this.postedTimestamp = LocalDateTime.now(); // Auto-set posting time
         this.status = RequirementStatus.OPEN; // Auto-set default status
-    }
-
-    // 3. (Optional) Constructor for All Fields (Less common)
-    public Requirement(long requirementId, String description, double budget, LocalDate serviceNeededDate, LocalDateTime postedTimestamp, String location, String status, User postedBy, List<Offer> offersReceived, Task task) {
-        this.requirementId = requirementId;
-        // ... set other fields similarly
     }
 }
