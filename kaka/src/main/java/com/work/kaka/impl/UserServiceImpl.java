@@ -3,7 +3,9 @@ package com.work.kaka.impl;
 import com.work.kaka.dto.UserDTO;
 import com.work.kaka.model.User;
 import com.work.kaka.repository.UserRepository;
+import com.work.kaka.service.OtpService;
 import com.work.kaka.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -21,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private OtpService otpService;
 
     @Override
     public User createUser(UserDTO userDTO, String password) {
@@ -31,6 +37,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password)); // Encode and save
         user.setBackgroundVerificationStatus("PENDING");
         user.setContactNumber("9876543210");
+        log.info("User Created: {}", user);
+
+        String otp = otpService.generateOtp();
+        otpService.sendOtp(user.getEmail(), otp);
+
         return userRepository.save(user);
     }
 
