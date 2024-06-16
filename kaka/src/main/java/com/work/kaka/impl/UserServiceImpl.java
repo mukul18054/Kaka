@@ -38,10 +38,6 @@ public class UserServiceImpl implements UserService {
         user.setBackgroundVerificationStatus("PENDING");
         user.setContactNumber("9876543210");
         log.info("User Created: {}", user);
-
-        String otp = otpService.generateOtp();
-        otpService.sendOtp(user.getEmail(), otp);
-
         return userRepository.save(user);
     }
 
@@ -77,6 +73,4 @@ public class UserServiceImpl implements UserService {
         // Implement filtering based on name and role
         return userRepository.findAll(); // Example: Return all users
     }
-
-
 }

@@ -2,7 +2,11 @@ package com.work.kaka.dto;
 
 
 import com.work.kaka.model.Community;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;

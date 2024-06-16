@@ -3,6 +3,17 @@ package com.work.kaka.dto;
 import com.work.kaka.model.Requirement;
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RequirementDTO {
 
     private Long requirementId;
@@ -15,14 +26,6 @@ public class RequirementDTO {
     // Optional fields (consider including only if needed for specific use cases)
     private String postedBy; // Username or identifier of the user who created the requirement
     private Long communityId; // ID of the community associated with the requirement
-
-    // Getters and Setters (can be automatically generated using Lombok)
-
-    // Constructors (can be automatically generated using Lombok)
-
-    public RequirementDTO() {
-        // No-argument constructor
-    }
 
     public RequirementDTO(Requirement requirement) {
         this.requirementId = requirement.getRequirementId();

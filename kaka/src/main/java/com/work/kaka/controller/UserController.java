@@ -1,13 +1,15 @@
 package com.work.kaka.controller;
+import com.work.kaka.dto.OtpDTO;
+import com.work.kaka.model.User;
+import com.work.kaka.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.work.kaka.dto.UserDTO;
-import com.work.kaka.model.*;
+import com.work.kaka.dto.VerifyOtpDTO;
 import com.work.kaka.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,33 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OtpService otpService;
+
+    @PostMapping("/request-otp")
+    public ResponseEntity<String> requestOtp(@RequestBody OtpDTO otpDTO) {
+        String otp = otpService.generateOtp();
+        otpService.sendOtp(otpDTO.getEmail(), otp);
+        return ResponseEntity.ok("OTP sent to your email!");
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<User> verifyOtp(@RequestBody VerifyOtpDTO verifyOtpDTO) {
+        UserDTO userDTO = verifyOtpDTO.getUserDto();
+        String enteredOtp = verifyOtpDTO.getOtp();
+        String email = userDTO.getEmail();
+
+        if (otpService.verifyOtp(email, enteredOtp)) {
+            User newUser = userService.createUser(userDTO, "password");
+            return ResponseEntity.created(URI.create("/users/" + newUser.getUserId())).body(newUser);
+        } else {
+            throw new RuntimeException("Invalid OTP");
+        }
+    }
+
+
+    //TODO: remove later if not get used
     @PostMapping("/create")
     public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO) {
         User newUser = userService.createUser(userDTO, "password");
