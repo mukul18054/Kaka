@@ -18,13 +18,13 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/create")
-    public Chat createChat(@RequestBody CreateChatRequest request) {
-        return chatService.createChat(request.getParticipant1(), request.getParticipant2());
+    public void createChat(@RequestBody CreateChatRequest request) {
+        chatService.createChat(request.getParticipant1(), request.getParticipant2());
     }
 
     @PostMapping("/send")
-    public Message sendMessage(@RequestBody SendMessageRequest request) {
-        return chatService.sendMessage(request.getChat(), request.getSender(), request.getRecipient(), request.getContent());
+    public boolean sendMessage(@RequestBody SendMessageRequest request) {
+        return chatService.sendMessage(request.getMessage());
     }
 
     @GetMapping("/{chatId}/messages")
