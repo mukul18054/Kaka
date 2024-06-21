@@ -1,7 +1,9 @@
 package com.work.kaka.model;
 
 import com.work.kaka.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message {
 
     @Id
@@ -37,10 +41,6 @@ public class Message {
 
 
     // Potentially add a 'read' flag (boolean) if you'd like to track that
-
-    // 1. No-Argument Constructor (Often required by frameworks)
-    public Message() {
-    }
 
     // 2. Constructor for Essential Details
     public Message(String content, LocalDateTime timestamp, User sender, User recipient) {
