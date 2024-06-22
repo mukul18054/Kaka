@@ -34,7 +34,7 @@ public class OtpServiceImpl implements OtpService {
         String subject = "Your OTP Code";
         String text = "Your OTP code is: " + otp;
         try {
-            otpMap.get("id").charAt(0);
+//            otpMap.get("id").charAt(0);
             otpMap.put(email, otp); // Store OTP temporarily (replace with a more robust solution)
             emailService.sendSimpleMessage(email, subject, text);
         } catch (Exception e) {

@@ -1,11 +1,13 @@
 package com.work.kaka.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.work.kaka.dto.UserDTO;
 import com.work.kaka.model.Chat;
 import com.work.kaka.model.Message;
 import com.work.kaka.model.User;
 import com.work.kaka.repository.ChatRepository;
 import com.work.kaka.repository.MessageRepository;
+import com.work.kaka.repository.UserRepository;
 import com.work.kaka.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,11 +28,16 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate; // Assuming KafkaTemplate is configured
 
+    @Autowired
+    private UserRepository userRepository;
     @Override
-    public void createChat(User participant1, User participant2) {
+    public void createChat(UserDTO participant1, UserDTO participant2) {
         Chat chat = new Chat();
-        chat.setParticipant1(participant1);
-        chat.setParticipant2(participant2);
+        // get User using email from userDTO
+        User participant1User = userRepository.findByEmail(participant1.getEmail());
+        User participant2User = userRepository.findByEmail(participant2.getEmail());
+        chat.setParticipant1(participant1User);
+        chat.setParticipant2(participant2User);
         chat.setCreatedTimestamp(LocalDateTime.now());
         chatRepository.save(chat);
     }

@@ -28,6 +28,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests().
                 requestMatchers("/users/**").authenticated().
+                requestMatchers("/chat/**").permitAll().
                 requestMatchers("/auth/login").permitAll()
                 .requestMatchers("requirements/**").permitAll()
                 .requestMatchers("/api/communities").authenticated() // Allow listing all communities
