@@ -25,8 +25,8 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private MessageRepository messageRepository;
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate; // Assuming KafkaTemplate is configured
+//    @Autowired
+//    private KafkaTemplate<String, String> kafkaTemplate; // Assuming KafkaTemplate is configured
 
     @Autowired
     private UserRepository userRepository;
@@ -47,7 +47,7 @@ public class ChatServiceImpl implements ChatService {
         try {
             messageRepository.save(message);
             String messageJson = new ObjectMapper().writeValueAsString(message); // Convert to JSON
-            kafkaTemplate.send("chat-messages", messageJson); // Send to Kafka topic
+//            kafkaTemplate.send("chat-messages", messageJson); // Send to Kafka topic
             return true;
         } catch (Exception e) {
             // Handle exceptions (e.g., database errors, Kafka issues)

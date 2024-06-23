@@ -36,7 +36,7 @@ public class Message {
     private User recipient;
 
     @ManyToOne
-    @JoinColumn(nullable = false) // Messages always belong to a chat
+    @JoinColumn(name = "chat_id", nullable = false) // Messages always belong to a chat
     private Chat chat;
 
 
