@@ -1,5 +1,6 @@
 package com.work.kaka.controller;
 import com.work.kaka.dto.OtpDTO;
+import com.work.kaka.exception.EmailOtpServiceException;
 import com.work.kaka.model.User;
 import com.work.kaka.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,15 @@ public class UserController {
     private OtpService otpService;
 
     @PostMapping("/request-otp")
-    public ResponseEntity<String> requestOtp(@RequestBody OtpDTO otpDTO) {
-        String otp = otpService.generateOtp();
-        otpService.sendOtp(otpDTO.getEmail(), otp);
-        return ResponseEntity.ok("OTP sent to your email!");
+    public ResponseEntity<String> requestOtp(@RequestBody OtpDTO otpDTO) throws EmailOtpServiceException {
+        try{
+            String otp = otpService.generateOtp();
+            otpService.sendOtp(otpDTO.getEmail(), otp);
+            return ResponseEntity.ok("OTP sent to your email!");
+        } catch (Exception ex) {
+            throw  new EmailOtpServiceException("Exception occurred at request otp");
+        }
+
     }
 
     @PostMapping("/verify-otp")
