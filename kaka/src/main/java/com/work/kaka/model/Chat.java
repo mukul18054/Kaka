@@ -1,9 +1,10 @@
 package com.work.kaka.model;
 
-//import javax.persistence.*;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chat {
 
     @Id
@@ -34,10 +37,6 @@ public class Chat {
 
     @OneToMany(mappedBy = "chat")
     private List<Message> messages;
-
-    // 1. No-Argument Constructor (Often required by frameworks)
-    public Chat() {
-    }
 
     // 2. Constructor for Essential Details
     public Chat(Requirement requirement, User participant1, User participant2, LocalDateTime createdTimestamp) {

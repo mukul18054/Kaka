@@ -1,7 +1,7 @@
 package com.work.kaka.controller;
 
-import com.work.kaka.dto.CreateChatRequest;
-import com.work.kaka.dto.SendMessageRequest;
+import com.work.kaka.dto.CreateChatDTO;
+import com.work.kaka.dto.SendMessageDTO;
 import com.work.kaka.model.Chat;
 import com.work.kaka.model.Message;
 import com.work.kaka.service.ChatService;
@@ -18,12 +18,12 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/create")
-    public void createChat(@RequestBody CreateChatRequest request) {
+    public void createChat(@RequestBody CreateChatDTO request) {
         chatService.createChat(request.getParticipant1(), request.getParticipant2());
     }
 
     @PostMapping("/send")
-    public boolean sendMessage(@RequestBody SendMessageRequest request) {
+    public boolean sendMessage(@RequestBody SendMessageDTO request) {
         return chatService.sendMessage(request.getMessage());
     }
 

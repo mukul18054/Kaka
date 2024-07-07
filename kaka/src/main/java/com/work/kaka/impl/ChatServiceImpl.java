@@ -10,6 +10,7 @@ import com.work.kaka.repository.MessageRepository;
 import com.work.kaka.repository.UserRepository;
 import com.work.kaka.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.kafka.core.KafkaTemplate;
 
@@ -45,13 +46,27 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public boolean sendMessage(Message message) {
         try {
+            // Fetch Chat based on sender or recipient (assuming chatId is not available in message)
+            User sender = message.getSender();
+            User recipient = message.getRecipient();
+            Chat chat = chatRepository.findByParticipant1AndParticipant2(sender, recipient);
+            if (chat == null) {
+                // Handle case where chat doesn't exist between sender and recipient
+                return false;
+            }
+            message.setChat(chat); // Set the chat on the message object
             messageRepository.save(message);
-            String messageJson = new ObjectMapper().writeValueAsString(message); // Convert to JSON
-            kafkaTemplate.send("chat-messages", messageJson); // Send to Kafka topic
+            String messageJson = new ObjectMapper().writeValueAsString(message);
+            kafkaTemplate.send("chat-messages", messageJson);
             return true;
         } catch (Exception e) {
-            // Handle exceptions (e.g., database errors, Kafka issues)
-            e.printStackTrace();
+            // Handle specific exceptions
+            if (e instanceof DataAccessException) {
+                // Retry logic for database errors
+                // ...
+            } else {
+                e.printStackTrace();
+            }
             return false;
         }
     }

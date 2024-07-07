@@ -1,6 +1,8 @@
 package com.work.kaka.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //import javax.persistence.*;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime; // For offer timestamp
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Offer {
 
     @Id
@@ -33,9 +37,6 @@ public class Offer {
     @JoinColumn(name = "offered_for", referencedColumnName = "requirementId")
     private Requirement offeredFor;
 
-    // 1. No-Argument Constructor (Often required by frameworks)
-    public Offer() {
-    }
 
     // 2. Constructor for Essential Details
     public Offer(String description, double offeredPrice, LocalDateTime timestamp, User offeredBy, Requirement offeredFor) {

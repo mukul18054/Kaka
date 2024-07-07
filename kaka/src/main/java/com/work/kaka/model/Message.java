@@ -40,8 +40,6 @@ public class Message {
     private Chat chat;
 
 
-    // Potentially add a 'read' flag (boolean) if you'd like to track that
-
     // 2. Constructor for Essential Details
     public Message(String content, LocalDateTime timestamp, User sender, User recipient) {
         this.content = content;

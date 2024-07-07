@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
     public User createUser(UserDTO userDTO, String password) {
         // Thorough input validation ...
         User user = new User();
+        // check if user already exists
+        if (userRepository.findByEmail(userDTO.getEmail()) != null) {
+            log.error("User already exists with email: {}", userDTO.getEmail());
+            return null;
+        }
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.map(userDTO, user); // Using ModelMapper for mapping
         user.setPassword(passwordEncoder.encode(password)); // Encode and save
