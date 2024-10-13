@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .chat-container {
+            width: 800px;
+            height: 600px;
+            display: flex;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .participant {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #ccc;
+        }
+        .participant:last-child {
+            border-right: none;
+        }
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .message-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: white;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+        .message.sent {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message.received {
+            background-color: #E0E0E0;
+        }
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        .input-area input {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .input-area button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="participant" id="participant1">
+            <div class="chat-header">Participant 1</div>
+            <div class="message-area" id="message-area-1"></div>
+            <div class="input-area">
+                <input type="text" id="message-input-1" placeholder="Type a message...">
+                <button onclick="sendMessage(1)">Send</button>
+            </div>
+        </div>
+        <div class="participant" id="participant2">
+            <div class="chat-header">Participant 2</div>
+            <div class="message-area" id="message-area-2"></div>
+            <div class="input-area">
+                <input type="text" id="message-input-2" placeholder="Type a message...">
+                <button onclick="sendMessage(2)">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stompClient = {};
+        const userId = {};
+        const otherUserId = {};
+
+        function connect(participantNumber) {
+            userId[participantNumber] = prompt(`Enter user ID for Participant ${participantNumber}:`);
+            otherUserId[participantNumber] = prompt(`Enter recipient ID for Participant ${participantNumber}:`);
+
+            // Use the full URL to your WebSocket endpoint
+            const socket = new SockJS('http://localhost:8000/ws');
+            stompClient[participantNumber] = Stomp.over(socket);
+            
+            const connectCallback = () => {
+                console.log('Connected: ' + participantNumber);
+                onConnected(participantNumber);
+            };
+
+            const errorCallback = (error) => {
+                console.error('Connection error:', error);
+                setTimeout(() => connect(participantNumber), 50000); // Attempt to reconnect after 5 seconds
+            };
+
+            stompClient[participantNumber].connect({}, connectCallback, errorCallback);
+
+        }
+
+        function onConnected(participantNumber) {
+            stompClient[participantNumber].subscribe(`/user/${userId[participantNumber]}/queue/messages`, (payload) => onMessageReceived(payload, participantNumber));
+        }
+
+        function onError(error) {
+            console.log('Error: ' + error);
+        }
+
+        function sendMessage(participantNumber) {
+            const messageInput = document.getElementById(`message-input-${participantNumber}`);
+            const messageContent = messageInput.value.trim();
+            if (messageContent && stompClient[participantNumber]) {
+                const chatMessage = {
+                    content: messageContent,
+                    senderId: userId[participantNumber],
+                    recipientId: otherUserId[participantNumber]
+                };
+                stompClient[participantNumber].send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+                displayMessage(messageContent, participantNumber, 'sent');
+                messageInput.value = '';
+            }
+        }
+
+        function onMessageReceived(payload, participantNumber) {
+            const message = JSON.parse(payload.body);
+            displayMessage(message.content, participantNumber, 'received');
+        }
+
+        function displayMessage(content, participantNumber, type) {
+            const messageArea = document.getElementById(`message-area-${participantNumber}`);
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            messageElement.textContent = content;
+            messageArea.appendChild(messageElement);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+
+        // Connect both participants
+        connect(1);
+        connect(2);
+    </script>
+</body>
+</html>

@@ -1,10 +1,7 @@
 package com.work.kaka.model;
 
 import com.work.kaka.model.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 //import javax.persistence.*;
 import jakarta.persistence.*;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Message {
 
     @Id
@@ -36,7 +34,7 @@ public class Message {
     private User recipient;
 
     @ManyToOne
-    @JoinColumn(nullable = false) // Messages always belong to a chat
+    @JoinColumn(name = "chat_id", nullable = false) // Messages always belong to a chat
     private Chat chat;
 
 
@@ -47,4 +45,5 @@ public class Message {
         this.sender = sender;
         this.recipient = recipient;
     }
+
 }

@@ -26,17 +26,17 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private MessageRepository messageRepository;
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate; // Assuming KafkaTemplate is configured
+//    @Autowired
+//    private KafkaTemplate<String, String> kafkaTemplate; // Assuming KafkaTemplate is configured
 
     @Autowired
     private UserRepository userRepository;
     @Override
-    public void createChat(UserDTO participant1, UserDTO participant2) {
+    public void createChat(String participant1, String participant2) {
         Chat chat = new Chat();
         // get User using email from userDTO
-        User participant1User = userRepository.findByEmail(participant1.getEmail());
-        User participant2User = userRepository.findByEmail(participant2.getEmail());
+        User participant1User = userRepository.findByEmail(participant1);
+        User participant2User = userRepository.findByEmail(participant2);
         chat.setParticipant1(participant1User);
         chat.setParticipant2(participant2User);
         chat.setCreatedTimestamp(LocalDateTime.now());
@@ -46,27 +46,13 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public boolean sendMessage(Message message) {
         try {
-            // Fetch Chat based on sender or recipient (assuming chatId is not available in message)
-            User sender = message.getSender();
-            User recipient = message.getRecipient();
-            Chat chat = chatRepository.findByParticipant1AndParticipant2(sender, recipient);
-            if (chat == null) {
-                // Handle case where chat doesn't exist between sender and recipient
-                return false;
-            }
-            message.setChat(chat); // Set the chat on the message object
             messageRepository.save(message);
-            String messageJson = new ObjectMapper().writeValueAsString(message);
-            kafkaTemplate.send("chat-messages", messageJson);
+            String messageJson = new ObjectMapper().writeValueAsString(message); // Convert to JSON
+//            kafkaTemplate.send("chat-messages", messageJson); // Send to Kafka topic
             return true;
         } catch (Exception e) {
-            // Handle specific exceptions
-            if (e instanceof DataAccessException) {
-                // Retry logic for database errors
-                // ...
-            } else {
-                e.printStackTrace();
-            }
+            // Handle exceptions (e.g., database errors, Kafka issues)
+            e.printStackTrace();
             return false;
         }
     }
@@ -79,5 +65,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Chat getChatById(Long chatId) {
         return chatRepository.findById(chatId).orElse(null);
+    }
+
+    @Override
+    public Chat findByParticipant1AndParticipant2(User sender, User recipient) {
+        return chatRepository.findByParticipant1AndParticipant2(sender, recipient);
     }
 }
